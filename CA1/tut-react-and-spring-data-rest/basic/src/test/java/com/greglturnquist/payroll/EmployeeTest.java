@@ -235,6 +235,45 @@ class EmployeeTest {
     }
 
     /**
+     * This method tests the Employee constructor when the e-mail is without an '@'
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void testEmployeeConstructorEmailWithoutAt() {
+        // Arrange
+        String invalidEmail = "frodo.com";
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> new Employee(
+                firstName, lastName, description, jobYears, invalidEmail));
+    }
+
+    /**
+     * This method tests the Employee constructor when the e-mail is with an '@' at the beginning
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void testEmployeeConstructorEmailWithAtAtBeginning() {
+        // Arrange
+        String invalidEmail = "@frodo.com";
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> new Employee(
+                firstName, lastName, description, jobYears, invalidEmail));
+    }
+
+    /**
+     * This method tests the Employee constructor when the e-mail is with an '@' at the end
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void testEmployeeConstructorEmailWithAtAtTheEnd() {
+        // Arrange
+        String invalidEmail = "frodo.com@";
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> new Employee(
+                firstName, lastName, description, jobYears, invalidEmail));
+    }
+
+    /**
      * This method tests if the equals method returns true when comparing two employee objects with the same values
      * The expected result is true
      */
@@ -262,6 +301,42 @@ class EmployeeTest {
         boolean result = employee.equals(differentValuesEmployee);
         // Assert
         assertEquals(expected, result);
+    }
+
+    /**
+     * This method tests the setEmail method of the Employee class when the e-mail is without an '@'
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void setEmail_invalidEmail_withoutAt() {
+        // Arrange
+        String invalidEmail = "frodo.com";
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> employee.setEmail(invalidEmail));
+    }
+
+    /**
+     * This method tests the setEmail method of the Employee class when the e-mail is with an '@' at the beginning
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void setEmail_invalidEmail_withAtAtBeginning() {
+        // Arrange
+        String invalidEmail = "@frodo.com";
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> employee.setEmail(invalidEmail));
+    }
+
+    /**
+     * This method tests the setEmail method of the Employee class when the e-mail is with an '@' at the end
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void setEmail_invalidEmail_withAtAtTheEnd() {
+        // Arrange
+        String invalidEmail = "frodo.com@";
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> employee.setEmail(invalidEmail));
     }
 
     /**
