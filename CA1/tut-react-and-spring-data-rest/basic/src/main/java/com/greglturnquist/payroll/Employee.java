@@ -32,22 +32,25 @@ public class Employee {
 	private String firstName;
 	private String lastName;
 	private String description;
+	private Integer jobYears;
 
 	private Employee() {}
 
-	public Employee(String firstName, String lastName, String description) throws IllegalArgumentException {
-		if (!isValidArguments(firstName, lastName, description)) {
+	public Employee(String firstName, String lastName, String description, Integer jobYears) throws IllegalArgumentException {
+		if (!isValidArguments(firstName, lastName, description, jobYears)) {
 			throw new IllegalArgumentException("Invalid Employee arguments");
 		}
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.description = description;
+		this.jobYears = jobYears;
 	}
 
-	private boolean isValidArguments(String firstName, String lastName, String description) {
+	private boolean isValidArguments(String firstName, String lastName, String description, Integer jobYears) {
 		return isValidName(firstName) &&
 				isValidName(lastName) &&
-				isValidDescription(description);
+				isValidDescription(description) &&
+				isValidJobYears(jobYears);
 	}
 	@Override
 	public boolean equals(Object o) {
@@ -57,7 +60,8 @@ public class Employee {
 		return Objects.equals(id, employee.id) &&
 			Objects.equals(firstName, employee.firstName) &&
 			Objects.equals(lastName, employee.lastName) &&
-			Objects.equals(description, employee.description);
+			Objects.equals(description, employee.description) &&
+			Objects.equals(jobYears, employee.jobYears);
 	}
 
 	private boolean isValidName(String name) {
@@ -66,11 +70,15 @@ public class Employee {
 	private boolean isValidDescription(String description) {
 		return (description != null && !description.trim().isEmpty());
 	}
+	private boolean isValidJobYears(Integer jobYears) {
+		return jobYears != null;
+	}
+
 
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(id, firstName, lastName, description);
+		return Objects.hash(id, firstName, lastName, description, jobYears);
 	}
 
 	public Long getId() {
@@ -111,6 +119,18 @@ public class Employee {
 		}
 		this.description = description;
 	}
+
+	public Integer getJobYears() {
+		return jobYears;
+	}
+
+	public void setJobYears(Integer jobYears) throws IllegalArgumentException {
+		if (!isValidJobYears(jobYears)) {
+			throw new IllegalArgumentException("Invalid job years");
+		}
+		this.jobYears = jobYears;
+	}
+
 	@Override
 	public String toString() {
 		return "Employee{" +
@@ -118,6 +138,7 @@ public class Employee {
 			", firstName='" + firstName + '\'' +
 			", lastName='" + lastName + '\'' +
 			", description='" + description + '\'' +
+			", jobYears='" + jobYears + '\'' +
 			'}';
 	}
 }
