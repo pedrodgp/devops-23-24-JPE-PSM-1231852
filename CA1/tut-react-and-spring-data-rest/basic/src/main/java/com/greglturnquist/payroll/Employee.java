@@ -35,12 +35,20 @@ public class Employee {
 
 	private Employee() {}
 
-	public Employee(String firstName, String lastName, String description) {
+	public Employee(String firstName, String lastName, String description) throws IllegalArgumentException {
+		if (!isValidArguments(firstName, lastName, description)) {
+			throw new IllegalArgumentException("Invalid Employee arguments");
+		}
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.description = description;
 	}
 
+	private boolean isValidArguments(String firstName, String lastName, String description) {
+		return isValidName(firstName) &&
+				isValidName(lastName) &&
+				isValidDescription(description);
+	}
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -50,6 +58,13 @@ public class Employee {
 			Objects.equals(firstName, employee.firstName) &&
 			Objects.equals(lastName, employee.lastName) &&
 			Objects.equals(description, employee.description);
+	}
+
+	private boolean isValidName(String name) {
+		return (name != null && !name.trim().isEmpty());
+	}
+	private boolean isValidDescription(String description) {
+		return (description != null && !description.trim().isEmpty());
 	}
 
 	@Override
@@ -70,26 +85,32 @@ public class Employee {
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(String firstName) throws IllegalArgumentException {
+		if (!isValidName(firstName)) {
+			throw new IllegalArgumentException("Invalid first name");
+		}
 		this.firstName = firstName;
 	}
-
 	public String getLastName() {
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(String lastName) throws IllegalArgumentException {
+		if (!isValidName(lastName)) {
+			throw new IllegalArgumentException("Invalid last name");
+		}
 		this.lastName = lastName;
 	}
-
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(String description) throws IllegalArgumentException {
+		if (!isValidDescription(description)) {
+			throw new IllegalArgumentException("Invalid description");
+		}
 		this.description = description;
 	}
-
 	@Override
 	public String toString() {
 		return "Employee{" +
