@@ -78,7 +78,7 @@ public class Employee {
 		return jobYears != null;
 	}
 	private boolean isValidEmail(String email) {
-		return (email != null && !email.trim().isEmpty());
+		return (email != null && !email.trim().isEmpty() && email.matches("^.+@.+.$"));
 	}
 
 	@Override
