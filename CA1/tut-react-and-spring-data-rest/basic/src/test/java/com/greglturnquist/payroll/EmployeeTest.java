@@ -26,8 +26,12 @@ class EmployeeTest {
     /**
      * Valid description to be used in the tests
      */
-
     String description;
+
+    /**
+     * Valid job years to be used in the tests
+     */
+    Integer jobYears;
 
 
     /**
@@ -39,7 +43,8 @@ class EmployeeTest {
         firstName = "Gandalf";
         lastName = "The Grey";
         description = "Wizard";
-        employee = new Employee(firstName, lastName, description);
+        jobYears = 1000;
+        employee = new Employee(firstName, lastName, description, jobYears);
     }
 
     /**
@@ -49,7 +54,7 @@ class EmployeeTest {
     @Test
     void testEmployeeConstructorValidArguments() {
         // Arrange & Act
-        Employee employeeResult = new Employee(firstName, lastName, description);
+        Employee employeeResult = new Employee(firstName, lastName, description, jobYears);
         // Assert
         assertNotNull(employeeResult);
     }
@@ -64,7 +69,7 @@ class EmployeeTest {
         String invalidFirstName = null;
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                invalidFirstName, lastName, description));
+                invalidFirstName, lastName, description, jobYears));
     }
 
     /**
@@ -77,7 +82,7 @@ class EmployeeTest {
         String invalidFirstName = "";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                invalidFirstName, lastName, description));
+                invalidFirstName, lastName, description, jobYears));
     }
 
     /**
@@ -90,7 +95,7 @@ class EmployeeTest {
         String invalidFirstName = "   ";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                invalidFirstName, lastName, description));
+                invalidFirstName, lastName, description, jobYears));
     }
 
     /**
@@ -103,7 +108,7 @@ class EmployeeTest {
         String invalidLastName = null;
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, invalidLastName, description));
+                firstName, invalidLastName, description, jobYears));
     }
 
     /**
@@ -116,7 +121,7 @@ class EmployeeTest {
         String invalidLastName = "";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, invalidLastName, description));
+                firstName, invalidLastName, description, jobYears));
     }
 
     /**
@@ -129,7 +134,7 @@ class EmployeeTest {
         String invalidLastName = "  ";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, invalidLastName, description));
+                firstName, invalidLastName, description, jobYears));
     }
 
     /**
@@ -142,7 +147,7 @@ class EmployeeTest {
         String invalidDescription = null;
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, lastName, invalidDescription));
+                firstName, lastName, invalidDescription, jobYears));
     }
 
     /**
@@ -155,7 +160,7 @@ class EmployeeTest {
         String invalidDescription = "";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, lastName, invalidDescription));
+                firstName, lastName, invalidDescription, jobYears));
     }
 
     /**
@@ -168,7 +173,20 @@ class EmployeeTest {
         String invalidDescription = "  ";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, lastName, invalidDescription));
+                firstName, lastName, invalidDescription, jobYears));
+    }
+
+    /**
+     * This method tests the Employee constructor when the job years is null
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void testEmployeeConstructorNullJobYears() {
+        // Arrange
+        Integer invalidJobYears = null;
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> new Employee(
+                firstName, lastName, description, invalidJobYears));
     }
 
     /**
@@ -178,7 +196,7 @@ class EmployeeTest {
     @Test
     void testEquals_sameValues() {
         // Arrange
-        Employee sameValuesEmployee = new Employee("Gandalf", "The Grey", "Wizard");
+        Employee sameValuesEmployee = new Employee("Gandalf", "The Grey", "Wizard", 1000);
         boolean expected = true;
         // Act
         boolean result = employee.equals(sameValuesEmployee);
@@ -193,7 +211,7 @@ class EmployeeTest {
     @Test
     void testEquals_differentValues() {
         // Arrange
-        Employee differentValuesEmployee = new Employee("Frodo", "Baggins", "Hobbit");
+        Employee differentValuesEmployee = new Employee("Frodo", "Baggins", "Hobbit", 100);
         boolean expected = false;
         // Act
         boolean result = employee.equals(differentValuesEmployee);
@@ -236,7 +254,7 @@ class EmployeeTest {
     @Test
     void testHashCode_sameValues() {
         // Arrange
-        Employee sameValuesEmployee = new Employee("Gandalf", "The Grey", "Wizard");
+        Employee sameValuesEmployee = new Employee("Gandalf", "The Grey", "Wizard", 1000);
         // Act
         int result = employee.hashCode();
         int result2 = sameValuesEmployee.hashCode();
@@ -251,7 +269,7 @@ class EmployeeTest {
     @Test
     void testHashCode_differentValues() {
         // Arrange
-        Employee differentEmployee = new Employee("Frodo", "Baggins", "Hobbit");
+        Employee differentEmployee = new Employee("Frodo", "Baggins", "Hobbit", 12);
         // Act
         int result = employee.hashCode();
         int result2 = differentEmployee.hashCode();
@@ -492,6 +510,50 @@ class EmployeeTest {
     }
 
     /**
+     * This method tests the getJobYears method of the Employee class
+     * It checks if the job years of the employee object is 1000
+     * The expected result is 1000
+     */
+    @Test
+    void getJobYears() {
+        // Arrange
+        Integer jobYearsExpected = 1000;
+        // Act
+        Integer result = employee.getJobYears();
+        // Assert
+        assertEquals(jobYearsExpected, result);
+    }
+
+    /**
+     * This method tests the setJobYears method of the Employee class
+     * It sets the job years of the employee object to 500
+     * The expected result is 500
+     */
+    @Test
+    void setJobYears_validJobYears() {
+        // Arrange
+        Integer jobYearsExpected = 500;
+        // Act
+        employee.setJobYears(jobYearsExpected);
+        Integer result = employee.getJobYears();
+        // Assert
+        assertEquals(jobYearsExpected, result);
+    }
+
+    /**
+     * This method tests the setJobYears method of the Employee class when the job years is null
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void setJobYears_invalidJobYears_null() {
+        // Arrange
+        Integer invalidJobYears = null;
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> employee.setJobYears(invalidJobYears));
+    }
+
+
+    /**
      * This method tests the toString method of the Employee class
      * It checks if the string representation of the employee object is as expected
      * The expected result is "Employee{id=null, firstName='Gandalf', lastName='The Grey', description='Wizard',
@@ -500,7 +562,7 @@ class EmployeeTest {
     @Test
     void testToString() {
         // Arrange
-        String expected = "Employee{id=null, firstName='Gandalf', lastName='The Grey', description='Wizard'}";
+        String expected = "Employee{id=null, firstName='Gandalf', lastName='The Grey', description='Wizard', jobYears='1000'}";
         // Act
         String result = employee.toString();
         // Assert
