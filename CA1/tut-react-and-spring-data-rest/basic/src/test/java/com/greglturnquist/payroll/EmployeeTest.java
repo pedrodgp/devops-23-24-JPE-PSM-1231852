@@ -33,6 +33,11 @@ class EmployeeTest {
      */
     Integer jobYears;
 
+    /**
+     * Valid e-mail to be used in the tests
+     */
+    String email;
+
 
     /**
      * Sets up the employee object and valid data for the tests
@@ -44,7 +49,8 @@ class EmployeeTest {
         lastName = "The Grey";
         description = "Wizard";
         jobYears = 1000;
-        employee = new Employee(firstName, lastName, description, jobYears);
+        email = "gandalf123@gmail.com";
+        employee = new Employee(firstName, lastName, description, jobYears, email);
     }
 
     /**
@@ -54,7 +60,7 @@ class EmployeeTest {
     @Test
     void testEmployeeConstructorValidArguments() {
         // Arrange & Act
-        Employee employeeResult = new Employee(firstName, lastName, description, jobYears);
+        Employee employeeResult = new Employee(firstName, lastName, description, jobYears, email);
         // Assert
         assertNotNull(employeeResult);
     }
@@ -69,7 +75,7 @@ class EmployeeTest {
         String invalidFirstName = null;
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                invalidFirstName, lastName, description, jobYears));
+                invalidFirstName, lastName, description, jobYears, email));
     }
 
     /**
@@ -82,7 +88,7 @@ class EmployeeTest {
         String invalidFirstName = "";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                invalidFirstName, lastName, description, jobYears));
+                invalidFirstName, lastName, description, jobYears, email));
     }
 
     /**
@@ -95,7 +101,7 @@ class EmployeeTest {
         String invalidFirstName = "   ";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                invalidFirstName, lastName, description, jobYears));
+                invalidFirstName, lastName, description, jobYears, email));
     }
 
     /**
@@ -108,7 +114,7 @@ class EmployeeTest {
         String invalidLastName = null;
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, invalidLastName, description, jobYears));
+                firstName, invalidLastName, description, jobYears, email));
     }
 
     /**
@@ -121,7 +127,7 @@ class EmployeeTest {
         String invalidLastName = "";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, invalidLastName, description, jobYears));
+                firstName, invalidLastName, description, jobYears, email));
     }
 
     /**
@@ -134,7 +140,7 @@ class EmployeeTest {
         String invalidLastName = "  ";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, invalidLastName, description, jobYears));
+                firstName, invalidLastName, description, jobYears, email));
     }
 
     /**
@@ -147,7 +153,7 @@ class EmployeeTest {
         String invalidDescription = null;
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, lastName, invalidDescription, jobYears));
+                firstName, lastName, invalidDescription, jobYears, email));
     }
 
     /**
@@ -160,7 +166,7 @@ class EmployeeTest {
         String invalidDescription = "";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, lastName, invalidDescription, jobYears));
+                firstName, lastName, invalidDescription, jobYears, email));
     }
 
     /**
@@ -173,7 +179,7 @@ class EmployeeTest {
         String invalidDescription = "  ";
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, lastName, invalidDescription, jobYears));
+                firstName, lastName, invalidDescription, jobYears, email));
     }
 
     /**
@@ -186,7 +192,46 @@ class EmployeeTest {
         Integer invalidJobYears = null;
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> new Employee(
-                firstName, lastName, description, invalidJobYears));
+                firstName, lastName, description, invalidJobYears, email));
+    }
+
+    /**
+     * This method tests the Employee constructor when the e-mail is null
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void testEmployeeConstructorNullEmail() {
+        // Arrange
+        String invalidEmail = null;
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> new Employee(
+                firstName, lastName, description, jobYears, invalidEmail));
+    }
+
+    /**
+     * This method tests the Employee constructor when the e-mail is empty
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void testEmployeeConstructorEmptyEmail() {
+        // Arrange
+        String invalidEmail = "";
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> new Employee(
+                firstName, lastName, description, jobYears, invalidEmail));
+    }
+
+    /**
+     * This method tests the Employee constructor when the e-mail is blank
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void testEmployeeConstructorBlankEmail() {
+        // Arrange
+        String invalidEmail = "   ";
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> new Employee(
+                firstName, lastName, description, jobYears, invalidEmail));
     }
 
     /**
@@ -196,7 +241,7 @@ class EmployeeTest {
     @Test
     void testEquals_sameValues() {
         // Arrange
-        Employee sameValuesEmployee = new Employee("Gandalf", "The Grey", "Wizard", 1000);
+        Employee sameValuesEmployee = new Employee("Gandalf", "The Grey", "Wizard", 1000, "gandalf123@gmail.com");
         boolean expected = true;
         // Act
         boolean result = employee.equals(sameValuesEmployee);
@@ -211,7 +256,7 @@ class EmployeeTest {
     @Test
     void testEquals_differentValues() {
         // Arrange
-        Employee differentValuesEmployee = new Employee("Frodo", "Baggins", "Hobbit", 100);
+        Employee differentValuesEmployee = new Employee("Frodo", "Baggins", "Hobbit", 100, "123@gmail.com");
         boolean expected = false;
         // Act
         boolean result = employee.equals(differentValuesEmployee);
@@ -254,7 +299,7 @@ class EmployeeTest {
     @Test
     void testHashCode_sameValues() {
         // Arrange
-        Employee sameValuesEmployee = new Employee("Gandalf", "The Grey", "Wizard", 1000);
+        Employee sameValuesEmployee = new Employee("Gandalf", "The Grey", "Wizard", 1000, "gandalf123@gmail.com");
         // Act
         int result = employee.hashCode();
         int result2 = sameValuesEmployee.hashCode();
@@ -269,7 +314,7 @@ class EmployeeTest {
     @Test
     void testHashCode_differentValues() {
         // Arrange
-        Employee differentEmployee = new Employee("Frodo", "Baggins", "Hobbit", 12);
+        Employee differentEmployee = new Employee("Frodo", "Baggins", "Hobbit", 12, "123@gmail.com");
         // Act
         int result = employee.hashCode();
         int result2 = differentEmployee.hashCode();
@@ -552,6 +597,72 @@ class EmployeeTest {
         assertThrows(IllegalArgumentException.class, () -> employee.setJobYears(invalidJobYears));
     }
 
+    /**
+     * This method tests the getEmail method of the Employee class
+     * It checks if the e-mail of the employee object is "gandalf123@gmail.com"
+     * The expected result is "gandalf123@gmail.com"
+     */
+    @Test
+    void getEmail() {
+        // Arrange
+        String emailExpected = "gandalf123@gmail.com";
+        // Act
+        String result = employee.getEmail();
+        // Assert
+        assertEquals(emailExpected, result);
+    }
+
+    /**
+     * This method tests the setEmail method of the Employee class
+     * It sets the e-mail of the employee object to "lord@hotmail.com"
+     * The expected result is "lord@hotmail.com"
+     */
+    @Test
+    void setEmail_valid() {
+        // Arrange
+        String emailExpected = "lord@hotmail.com";
+        // Act
+        employee.setEmail(emailExpected);
+        String result = employee.getEmail();
+        // Assert
+        assertEquals(emailExpected, result);
+    }
+
+    /**
+     * This method tests the setEmail method of the Employee class when the e-mail is null
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void setEmail_invalidEmail_null() {
+        // Arrange
+        String invalidEmail = null;
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> employee.setDescription(invalidEmail));
+    }
+
+    /**
+     * This method tests the setEmail method of the Employee class when the e-mail is empty
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void setEmail_invalidEmail_empty() {
+        // Arrange
+        String invalidEmail = "";
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> employee.setEmail(invalidEmail));
+    }
+
+    /**
+     * This method tests the setEmail method of the Employee class when the e-mail is blank
+     * The expected result is an IllegalArgumentException
+     */
+    @Test
+    void setEmail_invalidEmail_blank() {
+        // Arrange
+        String invalidEmail = "  ";
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> employee.setEmail(invalidEmail));
+    }
 
     /**
      * This method tests the toString method of the Employee class
@@ -562,7 +673,8 @@ class EmployeeTest {
     @Test
     void testToString() {
         // Arrange
-        String expected = "Employee{id=null, firstName='Gandalf', lastName='The Grey', description='Wizard', jobYears='1000'}";
+        String expected = "Employee{id=null, firstName='Gandalf', lastName='The Grey', description='Wizard', jobYears='1000', email='gandalf123@gmail.com'}";
+
         // Act
         String result = employee.toString();
         // Assert
