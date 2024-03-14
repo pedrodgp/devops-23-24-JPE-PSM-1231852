@@ -129,6 +129,12 @@ The rest of the assignment can be done by opening a bash terminal and running th
    git tag -a v1.1.0
    git push origin v1.1.0
    ```
+   
+To see the actual project, open a bash in the basic folder of the app and run the following command `./mvnw spring-boot:run
+`
+After that, open a browser and navigate to [http://localhost:8080](http://localhost:8080) to see.
+Should look like this:
+![image](https://i.postimg.cc/J4YZb8rQ/Captura-de-ecr-2024-03-13-234907.png)
 ---
 
 ## Implementing Changes
@@ -519,7 +525,10 @@ class Employee extends React.Component{
 
 To see the changes, open a bash in the basic folder of the app and run the following command `./mvnw spring-boot:run
 `
-After that, open a browser and navigate to [http://localhost:8080](http://localhost:8080/employees) to see the changes. 
+After that, open a browser and navigate to [http://localhost:8080](http://localhost:8080) to see the changes. 
+Should look like this:
+![image](https://i.postimg.cc/RVZw6hBF/Captura-de-ecr-2024-03-13-234938.png)
+
 
 
 **Four commits** in total can be made to the **main branch** to implement the changes:
@@ -785,7 +794,9 @@ class Employee extends React.Component{
 ```
 To see the changes, open a bash in the basic folder of the app and run the following command `./mvnw spring-boot:run
 `
-After that, open a browser and navigate to [http://localhost:8080](http://localhost:8080/employees) to see the changes.
+After that, open a browser and navigate to [http://localhost:8080](http://localhost:8080) to see the changes.
+And should look like this:
+![image](https://i.postimg.cc/HkJ5zNj1/Captura-de-ecr-2024-03-13-235000.png)
 
 
 **Four commits** in total can be made to the **_email-field_ branch** to implement the changes:
@@ -957,8 +968,8 @@ git push origin ca1-part2
 ---
 ## The timeline of the commits and branches:
 The project's development has been meticulously documented through a sequence of commits and branching, beginning with foundational setups and leading up to the implementation of key features and fixes.
-The timeline of the commits can be accessed through the following link: [**Timeline of the commits**](https://github.com/pedrodgp/devops-23-24-JPE-PSM-1231852/network)
-
+The timeline of the commits can be accessed through the following link: [**Timeline of the commits**](https://github.com/pedrodgp/devops-23-24-JPE-PSM-1231852/network). And should look like this:
+![timeline](https://i.postimg.cc/v8zWZ9Ck/Captura-de-ecr-2024-03-13-234533.png)
 ---
 
 ## Alternative to Git: Mercurial
