@@ -89,5 +89,5 @@ task createZip(type: Zip) {
 
     from 'src'
     archiveFileName = 'src.zip'
-    destinationDirectory = file('backup/backupsZip')
+    destinationDirectory = file('backup/backupZip')
 }
