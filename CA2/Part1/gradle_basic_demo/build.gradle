@@ -72,6 +72,7 @@ task runServer(type:JavaExec, dependsOn: classes){
     args '59001'
 }
 
+
 // Define a task to copy the contents of the src folder to a new backup/backupSrc folder
 task copy(type: Copy) {
     group = "DevOps"
@@ -79,4 +80,14 @@ task copy(type: Copy) {
 
     from 'src'
     into 'backup/backupSrc'
+}
+
+// Define a task to create a zip file of the contents of the src folder in a new backup/backupsZip folder
+task createZip(type: Zip) {
+    group = 'DevOps'
+    description = 'Copies the contents of the src folder to a new zip file.'
+
+    from 'src'
+    archiveFileName = 'src.zip'
+    destinationDirectory = file('backup/backupsZip')
 }
