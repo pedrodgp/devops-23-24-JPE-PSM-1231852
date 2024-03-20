@@ -71,3 +71,12 @@ task runServer(type:JavaExec, dependsOn: classes){
 
     args '59001'
 }
+
+// Define a task to copy the contents of the src folder to a new backup/backupSrc folder
+task copy(type: Copy) {
+    group = "DevOps"
+    description = "Copies the contents of the src folder to a new backup folder"
+
+    from 'src'
+    into 'backup/backupSrc'
+}
