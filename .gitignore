@@ -30,6 +30,8 @@
 # Gradle
 **/.idea/**/gradle.xml
 **/.idea/**/libraries
+**/.gradle/
+++/build/
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -134,6 +136,11 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+# Excluding unneeded files
+**/CA1/basic/src/main/resources/static/built/**
+**/example_application/**
+**/week1/**
 
 ### Node ###
 # Logs
