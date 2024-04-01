@@ -70,7 +70,9 @@ java -cp build/libs/basic_demo-0.1.0.jar basic_demo.ChatServerApp <server port>
 After opening the server and the clients, it should look like this:
 
 ![loginPedro](https://i.ibb.co/t8Yzsy9/1.png)
+
 ![loginAna](https://i.ibb.co/Q9K90sm/2.png)
+
 ![chatExample](https://i.ibb.co/YjDkz52/3.png)
 
 
@@ -159,8 +161,11 @@ task copy(type: Copy) {
     into 'backup/backupSrc'
 }
 ```
-3. Commit the changes and close the issue.
+3. If you run the task `copy` with the command `./gradlew copy`, the contents of the `src` folder will be copied to the `backup/backupSrc` folder. Make sure to add the `backup` folder to the `.gitignore` file to avoid committing the backup files to the repository.
 
+![backupSRC](https://i.ibb.co/nc57KXr/backupsrc.png)
+
+4. Commit the changes and close the issue.
 
 ## Add a new task to zip the src folder to a backup folder
 
@@ -180,7 +185,10 @@ task createZip(type: Zip) {
     destinationDirectory = file('backup/backupZip')
 }
 ```
-3. Commit the changes and close the issue.
+3. If you run the task `createZip` with the command `./gradlew createZip`, a zip file named `src.zip` will be created in the `backup/backupZip` folder containing the contents of the `src` folder. Make sure to add the `backup` folder to the `.gitignore` file to avoid committing the backup files to the repository.
+   
+![backupZIP](https://i.ibb.co/SvS1CMC/backupzip.png)
+4. Commit the changes and close the issue.
 
 # Conclusion
 
