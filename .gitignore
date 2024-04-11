@@ -241,7 +241,7 @@ out
 **/dist
 
 ## Gradle - CA2 Part 2 Jar
-**/CA2/Part2/react-and-spring-data-rest-basic/gradle/wrapper/gradle-wrapper.jar
+**/gradle/wrapper/gradle-wrapper.jar
 **/.frontend-gradle-plugin
 
 # Gatsby files
