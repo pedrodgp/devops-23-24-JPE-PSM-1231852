@@ -42,3 +42,11 @@ task copyJar(type: Copy) {
 	// Copy the jar file to the folder "dist"
 	into file("dist")
 }
+
+// Task to gradle delete Webpack-generated built files before the 'clean' task
+task deleteWebpackFiles(type: Delete) {
+	// Set the directory where the files to be deleted are located
+	delete fileTree(dir: 'src/main/resources/static/built')
+}
+// Ensure the custom task runs before the 'clean' task
+clean.dependsOn deleteWebpackFiles
