@@ -154,6 +154,7 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
+**/node
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -241,6 +242,7 @@ out
 
 ## Gradle - CA2 Part 2 Jar
 **/CA2/Part2/react-and-spring-data-rest-basic/gradle/wrapper/gradle-wrapper.jar
+**/.frontend-gradle-plugin
 
 # Gatsby files
 .cache/
@@ -293,8 +295,8 @@ out
 HELP.md
 **/.gradle
 **/!gradle/wrapper/gradle-wrapper.jar
-**/!**/src/main/**/build/
-**/!**/src/test/**/build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
 ### STS ###
 **/.apt_generated

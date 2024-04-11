@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.4'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id "org.siouan.frontend-jdk17" version "8.0.0"
 }
 
 group = 'com.gregturnquist'
@@ -25,6 +26,13 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+frontend {
+	nodeVersion ="16.20.2"
+	assembleScript ="run build"
+	cleanScript ="run clean"
+	checkScript ="run check"
 }
 
 // Task to gradle to copy the generated jar to a folder named ”dist” located a the project root folder level
