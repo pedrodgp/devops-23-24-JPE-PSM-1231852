@@ -24,7 +24,8 @@ The repository can be found [here](https://github.com/pedrodgp/devops-23-24-JPE-
 
 - #### Issue #1
      - **Tittle:** ```CA2 p2 - Migrate tut-react-and-spring-data-rest from Maven to Gradle```
-       The aim of Part 2 is to transition the _tut-react-and-spring-data-rest_ (CA1) from **Maven** to **Gradle**. The process involves:
+
+The aim of Part 2 is to transition the _tut-react-and-spring-data-rest_ (CA1) from **Maven** to **Gradle**. The process involves:
 
 2. **Branching**: Create and switch to a new branch named `tut-basic-gradle`.
 
@@ -171,4 +172,223 @@ clean.dependsOn deleteWebpackFiles
 4. Commit the changes and close the issue.
 
 
+
+No more tasks are required for this assignment. The project is now ready to be merged into the main branch.
+And the git tree should look like this:
+
+![Git Tree](https://i.ibb.co/cyGGVvC/Treede-ecr-2024-04-15-205856.png)
+
+
+
+
+# Alternative Approach (Maven)
+
+For the alternative technological solution to Gradle, we'll consider Apache Maven as the alternative build automation tool. Maven is widely used in Java projects for project management and build automation.
+
+## Alternative Solution: Apache Maven
+
+### Maven vs. Gradle: Build Automation Features
+
+1. **Configuration Syntax**: Maven uses an XML-based configuration file (pom.xml), which is more verbose compared to Gradle's Groovy or Kotlin DSL scripts. While XML is highly structured and standardized, Gradle's script-based approach offers more flexibility and dynamic configuration capabilities.
+
+2. **Dependency Management**: Both Maven and Gradle handle dependency management effectively, but Gradle provides a more concise and flexible approach to manage project dependencies and versioning using dynamic dependency resolution.
+
+3. **Performance**: Gradle often has better performance due to its build cache and incremental build capabilities, which avoid re-executing tasks that have not changed. Maven, while consistent, may re-execute tasks unnecessarily, leading to longer build times.
+
+4. **Community and Plugin Ecosystem**: Maven has a large and mature ecosystem of plugins, which is advantageous for projects requiring a wide range of tool integrations. Gradle's plugin ecosystem is also robust but benefits from being able to define custom build logic directly in the build script.
+
+5. **Ease of Use**: Maven is generally considered easier to learn due to its straightforward and less flexible structure, making it a good choice for simpler projects. Gradle's learning curve may be steeper due to its more powerful scripting capabilities.
+
+### Plugins and Tasks: Maven vs. Gradle
+
+1. **Creating and Adding Plugins**:
+    - **Maven**: Plugins in Maven are defined as goals in XML and can be added to the build lifecycle phases. Writing a custom Maven plugin involves creating a Java class that extends the Maven plugin interfaces, and configuring it in the `pom.xml`.
+    - **Gradle**: In Gradle, custom tasks and plugins can be written directly in the build script, or as standalone Java/Groovy classes. This provides a flexible way to add new functionality, integrated seamlessly with Gradle's rich API.
+
+### Using Maven to Achieve Similar Goals
+
+Given the project scenario, using Maven would involve:
+
+1. **Project Setup**: Create a Maven project structure and a `pom.xml` file to manage configurations.
+2. **Dependency Configuration**: Define dependencies for Spring Boot, Thymeleaf, JPA, and H2 in `pom.xml`.
+3. **Plugin Configuration**: Integrate Maven plugins for frontend management similar to the Gradle `org.siouan.frontend` plugin. For example, the `frontend-maven-plugin` can be used to manage node and npm scripts.
+4. **Build and Packaging**: Define custom Maven goals to handle packaging and other tasks similar to what you described for Gradle.
+
+The following sections provide a sample `pom.xml` configuration and Maven tasks to achieve similar goals as the Gradle tasks described:
+
+```xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.4.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.greglturnquist</groupId>
+    <artifactId>react-and-spring-data-rest-basic</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>React.js and Spring Data REST - Basic</name>
+    <description>An SPA with ReactJS in the frontend and Spring Data REST in the backend</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.9.1</version>
+                <configuration>
+                    <installDirectory>target</installDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>v12.14.0</nodeVersion>
+                            <npmVersion>6.13.4</npmVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>webpack build</id>
+                        <goals>
+                            <goal>webpack</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            
+        <!--Rest of the configuration...-->
+
+
+```
+
+
+### Maven Tasks to Achieve Similar Goals
+
+#### 1. Copying the Generated JAR to a `dist` Directory
+
+In Maven, you can use the `maven-antrun-plugin` to perform file operations like copying files. Here's how you can configure it to copy the generated JAR to a `dist` directory after building the project.
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-antrun-plugin</artifactId>
+    <version>3.0.0</version>
+    <executions>
+        <execution>
+            <id>copy-jar</id>
+            <phase>package</phase>
+            <goals>
+                <goal>run</goal>
+            </goals>
+            <configuration>
+                <target>
+                    <mkdir dir="${project.basedir}/dist"/>
+                    <copy file="${project.build.directory}/${project.build.finalName}.jar" todir="${project.basedir}/dist"/>
+                </target>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
+If you run `./mvnw package`, the JAR file will be copied to the `dist` directory.
+
+#### 2. Deleting All Files Generated by Webpack Before the Clean Task
+
+
+To delete files before the `clean` task in Maven, you can configure the `maven-clean-plugin` to include additional directories. If your Webpack output is configured to a specific directory under `src/main/resources/static/built`, you can specify this path to be cleaned up as well.
+
+```xml
+<plugin>
+    <artifactId>maven-clean-plugin</artifactId>
+    <version>3.1.0</version>
+    <configuration>
+        <filesets>
+            <fileset>
+                <directory>src/main/resources/static/built</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </fileset>
+        </filesets>
+    </configuration>
+</plugin>
+```
+
+This configuration adds a fileset to the default clean process, ensuring that the specified directory is cleared out when you run `./mvnw clean`.
+
+### Implementing the Tasks
+
+To implement first you need to compile the project with `./mvnw compile` and then you can run the tasks with `./mvnw package` and `./mvnw clean`. If you run the application with `./mvnw spring-boot:run` you should be able to access the application at `http://localhost:8080/`.
+
+The tasks in a Maven project, add the respective plugin configurations to your `pom.xml` file under the `<build><plugins>` section. These configurations will enable Maven to handle the file operations as required by your project setup, similar to the Gradle tasks you initially described.
+
+These Maven configurations should be directly applicable to the project, providing functionality comparable to the Gradle tasks for managing JAR distribution and cleanup of generated files, effectively aligning with the goals of the assignment.
+
+
+# Conclusion
+
+This report detailed the transition of the `tut-react-and-spring-data-rest` project from Maven to Gradle, aligning with modern development practices focused on automation and efficiency. The exercise enhanced our understanding of build tools, crucial in software development pipelines.
+
+By adopting Gradle, we utilized its script-based configuration and performance benefits, like incremental builds. We implemented specific tasks for managing JAR files and frontend dependencies, demonstrating Gradle's versatility.
+
+The comparison with Maven provided insights into each tool's strengths and limitations, helping us appreciate their applicability based on project requirements. This experience has equipped us with valuable skills, enabling us to select and utilize the most suitable build tool for future projects, thus optimizing our development processes.
 
