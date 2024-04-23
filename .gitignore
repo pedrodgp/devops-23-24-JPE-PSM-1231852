@@ -111,6 +111,8 @@ fabric.properties
 
 # Package Files #
 **.jar
+# except for the following package files
+!gradle-wrapper.jar
 **.war
 **.nar
 **.ear
