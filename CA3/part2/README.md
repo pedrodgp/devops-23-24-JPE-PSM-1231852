@@ -360,7 +360,7 @@ Vagrant.configure("2") do |config|
 
     # We need to download Tomcat10
     web.vm.provision "shell", inline: <<-SHELL
-      wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.23/bin/apache-tomcat-10.1.23.tar.gz
+      wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.tar.gz
       sudo tar xzvf apache-tomcat-10*tar.gz -C .
       sudo chown -R vagrant:vagrant apache-tomcat-10*
       sudo chmod -R u+x apache-tomcat-10* 
@@ -376,7 +376,7 @@ Vagrant.configure("2") do |config|
     # Clone the repository and build the project
     web.vm.provision "shell", inline: <<-SHELL, privileged: false
       git clone https://github.com/pedrodgp/devops-23-24-JPE-PSM-1231852.git
-      cd CA2/part2/react-and-spring-data-rest-basic
+      cd devops-23-24-JPE-PSM-1231852/CA2/Part2/react-and-spring-data-rest-basic
       chmod u+x gradlew
       ./gradlew clean build
 
@@ -391,3 +391,154 @@ Vagrant.configure("2") do |config|
   end
 end
 ```
+
+# Alternative Solution: Using Hyper-V as a Hypervisor
+
+### What is Hyper-V?
+
+Hyper-V is a native hypervisor developed by Microsoft, which allows users to create and run virtual machines on Windows
+systems. As a type of platform virtualization, Hyper-V enables the host machine to support multiple, isolated virtual
+environments, known as virtual machines (VMs). This technology is integrated into Windows as an optional feature in
+versions such as Windows 10 Pro, Enterprise, and Education, as well as in Windows Server.
+
+#### Key Features of Hyper-V:
+
+* Hardware Virtualization: Hyper-V takes advantage of hardware virtualization capabilities provided by modern CPUs to
+  deliver enhanced performance and security features.
+
+* Multiple OS Support: It supports various operating systems on the guest VMs, allowing Windows, Linux, and others to
+  run
+  simultaneously on the same physical hardware.
+
+* Live Migration: Users can move running VMs from one host to another without any downtime, enhancing flexibility in
+  load
+  balancing and maintenance without impacting system availability.
+
+* Virtual Network Switches: It provides a rich set of networking capabilities, enabling virtual network switches,
+  different levels of isolation, and connectivity configurations to emulate complex network topologies.
+
+* Snapshots: Hyper-V allows taking snapshots of a running VM, capturing the complete state of the VM at a specific point
+  in time. This is beneficial for backup, restore, and disaster recovery scenarios.
+
+* Scalability and Resource Management:Hyper-V supports a robust set of features for managing virtual hardware resources,
+  including CPU cores, memory, and storage adaptations, allowing for efficient scaling as demands grow.
+
+### Comparing Hyper-V with VirtualBox:
+
+When considering Hyper-V as an alternative to VirtualBox for deploying virtual environments, several factors should be
+evaluated to determine the best fit for the specific use case:
+
+1. **Performance**: Hyper-V generally provides better performance and utilizes hardware virtualization support more
+   efficiently compared to VirtualBox, especially on Windows systems where it is integrated into the OS.
+
+2. **Networking Features**: Hyper-V offers advanced networking features such as virtual network adapters and external
+   network switches, which may provide more robust networking capabilities compared to VirtualBox.
+
+3. **Management Tools**: Hyper-V comes with a strong set of management tools integrated with Windows, like the Hyper-V
+   Manager for managing virtual machines. VirtualBox has a simpler, user-friendly interface but may lack some deeper
+   configuration options available in Hyper-V.
+
+4. **Snapshot and Save States**: Both VirtualBox and Hyper-V support snapshots; however, Hyper-V's snapshot management
+   is integrated with Windows and might be more robust in handling complex snapshot operations.
+
+5. **Linux Support**: VirtualBox generally has better support and performance with a wide range of Linux distributions
+   compared to Hyper-V, which is more Windows-centric in its optimization.
+
+### Configuring Vagrant with Hyper-V for this Assignment:
+
+To use Hyper-V as the hypervisor with Vagrant, first ensure the Hyper-V is enabled on your Windows machine.
+
+**Adjustments to the Vagrantfile**:
+
+- **Provider Specific Options**: Configured `hyperv` as the provider with specific options like CPU and memory
+  allocations.
+- **Network Settings**: Defined private network IPs and port forwarding rules similar to those set in the VirtualBox
+  configuration.
+- **Provisioning Scripts**: Updated to ensure all necessary software and settings are properly configured for both the
+  database and web server VMs.
+
+### The Vagrantfile - Final Result for Hyper-V:
+
+Here’s how it be adjusted the Vagrantfile for using Hyper-V and ensuring that all the previous setup requirements are
+met:
+
+```ruby
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+  config.vm.provider "hyperv" do |h|
+    h.cpus = 1
+    h.memory = 1024
+    h.linked_clone = true
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get update -y
+    sudo apt-get install -y iputils-ping avahi-daemon libnss-mdns unzip openjdk-17-jdk-headless
+  SHELL
+
+  config.vm.define "db" do |db|
+    db.vm.hostname = "h2-database"
+    db.vm.network "private_network", ip: "192.168.56.11"
+    db.vm.network "forwarded_port", guest: 8082, host: 8082
+    db.vm.network "forwarded_port", guest: 9092, host: 9092
+
+    db.vm.provision "shell", inline: <<-SHELL
+      wget https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/h2-2.2.224.jar
+    SHELL
+
+    db.vm.provision "shell", :run => 'always', inline: <<-SHELL
+      java -cp ./h2*.jar org.h2.tools.Server -web -webAllowOthers -tcp -tcpAllowOthers -ifNotExists > ~/out.txt &
+    SHELL
+  end
+
+  config.vm.define "web" do |web|
+    web.vm.hostname = "tomcat-server"
+    web.vm.network "private_network", ip: "192.168.56.10"
+    web.vm.network "forwarded_port", guest: 8080, host: 8080
+
+    web.vm.provision "shell", inline: <<-SHELL
+      wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.tar.gz
+      tar xzvf apache-tomcat-10*.tar.gz -C .
+      chmod u+x apache-tomcat-10*/bin/startup.sh
+      ./apache-tomcat-10*/bin/startup.sh
+    SHELL
+
+    web.vm.provision "shell", inline: <<-SHELL, privileged: false
+      git clone https://github.com/pedrodgp/devops-23-24-JPE-PSM-1231852.git
+      cd devops-23-24-JPE-PSM-1231852/CA2/Part2/react-and-spring-data-rest-basic
+      chmod u+x gradlew
+      ./gradlew clean build
+
+      sudo cp ./build/libs/react-and-spring-data-rest-basic-0.0.1-SNAPSHOT.war ~/apache-tomcat-10*/webapps/
+    SHELL
+  end
+end
+```
+
+### Running the Vagrantfile with Hyper-V:
+
+Open the terminal in **administrator mode** and navigate to the directory containing the Vagrantfile. Run the following
+command to start the VMs using Hyper-V as the provider, note that the `--provider=hyperv` flag is used to specify the
+hypervisor because the default is VirtualBox:
+
+```
+vagrant up --provider=hyperv
+```
+
+If everything is configured correctly, the VMs should be created, and the Spring Boot application and H2 database should
+be deployed successfully in the Hyper-V environment.
+
+Open the Hyper-V Manager to view the running VMs and access the services, you will see running: `db_h2_database`
+and `web_tomcat10_server`.
+
+![Hyper-V Manager](https://i.ibb.co/9bZny8p/hyper-v.png)
+
+# Conclusion
+
+In this report, we successfully implemented a virtualized environment using Vagrant, demonstrating the deployment of a
+Spring Boot application alongside an H2 database. This exercise illustrated the value of automation and consistency in
+development environments through the use of Vagrant with both Oracle VM VirtualBox and Hyper-V. By automating the setup
+process, we enhanced reproducibility and efficiency, allowing developers to focus more on development tasks rather than
+environment configuration. This project highlights the practical application of DevOps principles, ensuring that
+environments are easily replicable and manageable, which is crucial for scalable and reliable software development.
+

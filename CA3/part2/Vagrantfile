@@ -56,10 +56,10 @@ Vagrant.configure("2") do |config|
 
     # We need to download Tomcat10
     web.vm.provision "shell", inline: <<-SHELL
-      wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.23/bin/apache-tomcat-10.1.23.tar.gz
+      wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.tar.gz
       sudo tar xzvf apache-tomcat-10*tar.gz -C .
       sudo chown -R vagrant:vagrant apache-tomcat-10*
-      sudo chmod -R u+x apache-tomcat-10* 
+      sudo chmod -R u+x apache-tomcat-10*
     SHELL
 
     # The following provision shell will run ALWAYS so that we can execute the Tomcat10 server process
