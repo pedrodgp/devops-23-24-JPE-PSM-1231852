@@ -1,0 +1,15 @@
+# Use a base image with JDK installed
+FROM openjdk:21-jdk-slim
+LABEL author="Pedro Pires, 1231852"
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the JAR file from the host machine to the container
+COPY CA2/part1/gradle_basic_demo/build/libs/basic_demo-0.1.0.jar app.jar
+
+# Expose the port that the application will use
+EXPOSE 59001
+
+# Specify the entry point for the application
+ENTRYPOINT ["java", "-cp", "app.jar", "basic_demo.ChatServerApp", "59001"]
