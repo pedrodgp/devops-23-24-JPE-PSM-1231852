@@ -1,0 +1,22 @@
+# Dockerfile for H2 Database Server
+# Use the official Ubuntu base image
+FROM ubuntu
+
+# Install Java 8, unzip and wget
+RUN apt-get update && \
+  apt-get install -y openjdk-21-jdk-headless && \
+  apt-get install unzip -y && \
+  apt-get install wget -y
+
+# Set the working directory
+WORKDIR /usr/src/app/
+
+# Download the H2 database server
+RUN wget https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar
+
+# Expose the ports
+EXPOSE 8082
+EXPOSE 9092
+
+# Run the H2 server
+CMD ["java", "-cp", "h2-1.4.200.jar", "org.h2.tools.Server", "-web", "-webAllowOthers", "-tcp", "-tcpAllowOthers", "-ifNotExists"]
