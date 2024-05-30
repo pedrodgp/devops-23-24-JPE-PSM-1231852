@@ -204,3 +204,126 @@ Now it is possible to run the image from Docker Hub using the following command:
 docker run -it --rm -p 59001:59001 pdgpires/gradle_basic_demo:v1
 ```
 
+# Version 2 - Build the Chat Server in Host and Copy the jar "Into" the Dockerfile
+
+In this version, the chat server application is built on the host machine using the Gradle wrapper.**The built JAR file
+is then copied into the Docker container using the Dockerfile.**
+
+### Build the Chat Server in Host Machine
+
+Clone and build the Chat Server Application to generate the JAR file on the host machine:
+
+   ```bash
+   cd devops-23-24-JPE-PSM-1231852/CA2/Part1/gradle_basic_demo
+   ./gradlew build
+  ```
+   - `cd gradle_basic_demo`:
+       - This command changes the current directory to `gradle_basic_demo`.
+   - `./gradlew build`:
+       - This command builds the project using Gradle.
+   - After, go back to the root directory of the project using the command `cd ../../..`.
+
+### Explanation of Dockerfile
+
+#### Dockerfile:
+```Dockerfile
+# Use a base image with JDK installed
+FROM openjdk:21-jdk-slim
+LABEL author="Pedro Pires, 1231852"
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the JAR file from the host machine to the container
+COPY CA2/part1/gradle_basic_demo/build/libs/basic_demo-0.1.0.jar app.jar
+
+# Expose the port that the application will use
+EXPOSE 59001
+
+# Specify the entry point for the application
+ENTRYPOINT ["java", "-cp", "app.jar", "basic_demo.ChatServerApp", "59001"]
+
+```
+
+1. **`FROM openjdk:21-jdk-slim`:**
+    - This line sets the base image to `openjdk:21-jdk-slim`.
+2. **`WORKDIR /app`:**
+    - This line sets the working directory inside the container to `/app`.
+3. **`COPY CA2/part1/gradle_basic_demo/build/libs/basic_demo-0.1.0.jar app.jar`:**
+    - This line copies the JAR file from the host machine to the `/app` directory inside the container.
+    - The path `CA2/part1/gradle_basic_demo/build/libs/basic_demo-0.1.0.jar` should be updated based on the location of
+      the built JAR file on the host machine.
+4. **`EXPOSE 59001`:**
+    - This line exposes port 59001 in the container.
+    - This is the port that the chat server listens on.
+5. **`ENTRYPOINT ["java", "-cp", "app.jar", "basic_demo.ChatServerApp", "59001"]`:**
+    - This line specifies the entry point for the application.
+        - When the container starts, it runs the JAR file `app.jar` with the main class `basic_demo.ChatServerApp` and
+          port `59001`.
+
+### Build the Docker Image
+
+In this section we will make the commands in the **terminal in the root directory of the project**.
+
+1. **Build the Docker Image:**
+   ```bash
+   docker build -f CA4/part1/Dockerfile_v2 -t ca4-part1:v2 .
+   ```
+   - The `-f` flag is used to specify the Dockerfile to use and `CA4/part1/Dockerfile_v2` is the path to the Dockerfile.
+   - The `-t` flag is used to tag the image.
+   - The `ca4-part1:v2` tag is used to name the image.
+   - The `.` at the end of the command specifies the build context as the current directory.
+
+### Run the Docker Container and Test the Chat Server
+
+1. **Run the Docker Container:**
+
+   ```bash
+   docker run -it --rm -p 59001:59001 ca4-part1:v2
+   ```
+   - The `-it` flag is used to run the container interactively.
+   - The `--rm` flag is used to remove the container when it exits, which is useful for temporary containers.
+   - The `-p 59001:59001` flag is used to map port 59001 on the host machine to port 59001 in the container.
+   - This command runs the Docker container interactively with the image `ca4-part1:v2`.
+
+
+2. **Run the clients**:
+
+You must build the application in the host machine to run the clients. And after that, you can run the clients using different terminals for each client.
+Use the following command to run the client:
+
+   ```bash
+   ./gradlew runClient
+   ```
+
+You should now have similar results as in the next image:
+
+![Chat Server V2](https://i.ibb.co/yp9YJfW/docke-img2.png)
+
+### Push the Docker Image to Docker Hub:
+
+   ```bash
+   docker login
+   docker tag ca4-part1:v2 pdgpires/gradle_basic_demo:v2
+   docker push pdgpires/gradle_basic_demo:v2
+   ```
+- The `docker login` command is used to log in to Docker Hub.
+- The `docker tag` command is used to tag the image with the Docker Hub username and repository name.
+- The `docker push` command is used to push the image to Docker Hub.
+
+Now it is possible to run the image from Docker Hub using the following command:
+
+```bash
+docker run -it --rm -p 59001:59001 pdgpires/gradle_basic_demo:v2
+```
+
+# Conclusion
+
+In this assignment, I demonstrated two approaches to containerizing a chat server application using Docker. The first
+approach builds the application inside the Docker container, ensuring that the build process is encapsulated within the
+container environment. The second approach builds the application on the host machine and copies the built JAR file into
+the container, which can be more efficient for development workflows.
+
+By following these methods, I have leveraged Docker's capabilities to create portable and consistent environments for
+the applications, making it easier to develop, test, and deploy software across different systems. This exercise
+highlights the flexibility and power of Docker in modern DevOps practices.
