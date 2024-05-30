@@ -1,0 +1,29 @@
+# Stage 1: Build the application
+# Use a larger image for the builder stage
+FROM gradle:jdk21 as builder
+LABEL author="Pedro Pires, 1231852"
+
+# Set the working directory
+WORKDIR /ca4-part1/devops-23-24-JPE-PSM-1231852/CA2/Part1/gradle_basic_demo
+
+# Copy the repository
+COPY CA2/part1/gradle_basic_demo .
+
+# Ensure Gradle wrapper has execution permissions
+RUN chmod +x gradlew
+
+# Build the application
+CMD ["./gradlew", "build"]
+
+# Stage 2: Create the final image with the built JAR
+# Use a smaller image for the final image
+FROM openjdk:21-jdk-slim
+
+# Set the working directory
+WORKDIR /ca4-part1
+
+# Copy the built JAR from the builder stage
+COPY --from=builder /ca4-part1/devops-23-24-JPE-PSM-1231852/CA2/Part1/gradle_basic_demo/build/libs/*.war ca4-part1.jar
+
+# Specify the entry point for the application
+ENTRYPOINT ["java", "-cp", "ca4-part1.jar", "basic_demo.ChatServerApp", "59001"]
