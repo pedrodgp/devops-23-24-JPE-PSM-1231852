@@ -308,3 +308,144 @@ environments.
 
 # Comparison with Kubernetes
 
+## Introduction to Kubernetes
+
+Kubernetes (often abbreviated as K8s) is an open-source container orchestration platform that automates many of the
+manual processes involved in deploying, managing, and scaling containerized applications. While Docker Compose is
+designed for simpler, single-host setups, Kubernetes is designed for complex, multi-host environments and provides a
+more robust and flexible approach to container orchestration.
+
+## Comparison of Features
+
+### Docker Compose
+
+- **Ease of Use**: Simple to set up and use for small to medium-sized applications.
+- **Configuration**: Uses a single `docker-compose.yml` file to define services, networks, and volumes.
+- **Deployment**: Suitable for development, testing, and small-scale production deployments.
+- **Networking**: Basic networking capabilities.
+- **Scaling**: Limited scaling capabilities compared to Kubernetes.
+- **Monitoring and Logging**: Basic logging and monitoring capabilities.
+
+### Kubernetes
+
+- **Ease of Use**: More complex to set up and use, but offers more powerful features.
+- **Configuration**: Uses multiple configuration files (`Deployment`, `Service`, `Config
+Map`, etc.) to define resources.
+
+- **Deployment**: Suitable for large-scale production deployments with complex requirements.
+- **Networking**: Advanced networking capabilities, including service discovery and load balancing.
+- **Scaling**: Robust and automated scaling capabilities (horizontal and vertical scaling).
+- **Monitoring and Logging**: Advanced monitoring and logging capabilities through integration with tools like
+  Prometheus, Grafana, and ELK stack.
+
+### Using Kubernetes to Achieve Similar Goals
+
+To achieve the same goals presented in this assignment using Kubernetes, follow these steps:
+
+1. **Create Kubernetes Deployment and Service for the Web Application named `web-deployment.yaml`**
+
+    ```yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: web-deployment
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: web
+      template:
+        metadata:
+          labels:
+            app: web
+        spec:
+          containers:
+            - name: web
+              image: pdgpires/ca4_p2_web:v1.0
+              ports:
+                - containerPort: 8080
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: web-service
+    spec:
+      selector:
+        app: web
+      ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 8080
+      type: LoadBalancer
+    ```
+
+2. **Create Kubernetes Deployment and Service for the Database named `db-deployment.yaml`**
+
+    ```yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: db-deployment
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: db
+      template:
+        metadata:
+          labels:
+            app: db
+        spec:
+          containers:
+            - name: db
+              image: pdgpires/ca4_p2_db:v1.0
+              ports:
+                - containerPort: 8082
+                - containerPort: 9092
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: db-service
+    spec:
+      selector:
+        app: db
+      ports:
+        - protocol: TCP
+          port: 8082
+          targetPort: 8082
+        - protocol: TCP
+          port: 9092
+          targetPort: 9092
+      type: ClusterIP
+    ```
+
+3. **Apply the Kubernetes Configurations**
+
+    ```bash
+    kubectl apply -f web-deployment.yaml
+    kubectl apply -f db-deployment.yaml
+    ```
+
+By using Kubernetes, you can leverage its advanced features to manage and scale your applications more efficiently.
+Kubernetes provides a robust and flexible platform for deploying, managing, and scaling containerized applications in
+production environments.
+
+
+# Conclusion
+
+In this technical report, we have explored how to use Docker Compose to define and run multi-container Docker
+applications.
+We have created a Docker Compose file that defines two services: a database service and a web service. We have also
+explained how to build and run the Docker containers using Docker Compose commands. Finally, we have demonstrated how to
+push the Docker images to Docker Hub, making them accessible for deployment in different environments.
+
+We have also compared Docker Compose with Kubernetes, highlighting the differences in features and use cases. While
+Docker Compose is suitable for simpler, single-host setups, Kubernetes is designed for complex, multi-host environments
+and provides more advanced container orchestration capabilities.
+
+In conclusion, Docker Compose is a valuable tool for defining and running multi-container applications in a simple and
+efficient way. However, for more complex and scalable deployments, Kubernetes can provide a more robust and flexible
+solution. By understanding the strengths and limitations of each tool, you can choose the right tool for your specific
+use case and requirements.
+
