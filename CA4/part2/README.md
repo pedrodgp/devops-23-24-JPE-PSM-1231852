@@ -7,13 +7,21 @@
 ## Index
 
 1. [Introduction](#introduction)
+
 2. [What is Docker Compose](#what-is-docker-compose)
+
 3. [Create a Docker Web Application](#create-a-docker-web-application)
-   4. [Create the Dockerfile Web](#create-the-dockerfile-web)
-   5. [Create the Dockerfile Database](#create-the-dockerfile-database)
-   6. [Create the docker-compose.yml File](#create-the-docker-compose.yml-file)
-   7. [Build, Run, Tag, and Push the Docker Image](#build-run-tag-and-push-the-docker-image)
+
+4. [Create the Dockerfile Web](#create-the-dockerfile-web)
+   
+5. [Create the Dockerfile Database](#create-the-dockerfile-database)
+
+6. [Create the docker-compose.yml File](#create-the-docker-compose.yml-file)
+   
+7. [Build, Run, Tag, and Push the Docker Image](#build-run-tag-and-push-the-docker-image)
+   
 8. [Comparison with Kubernetes](#comparison-with-kubernetes)
+
 9. [Conclusion](#conclusion)
 
 # # Introduction
