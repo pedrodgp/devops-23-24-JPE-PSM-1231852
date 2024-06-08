@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out...'
-                git branch: 'main', credentialsId: 'jenkins', url: 'https://github.com/pedrodgp/devops-jen'
+                git branch: 'main', credentialsId: 'jenkins', url: 'https://github.com/pedrodgp/devops-23-24-JPE-PSM-1231852'
             }
         }
 
