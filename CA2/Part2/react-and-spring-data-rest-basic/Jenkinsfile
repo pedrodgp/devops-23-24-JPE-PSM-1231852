@@ -16,7 +16,7 @@ pipeline {
 
         stage('Assemble') {
             steps {
-                dir('CA2/part2/react-and-spring-data-rest-basic') {
+                dir('CA2/Part2/react-and-spring-data-rest-basic') {
                     echo 'Assembling...'
                     sh 'chmod +x gradlew'
                     sh './gradlew clean assemble'
@@ -26,7 +26,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir('CA2/part2/react-and-spring-data-rest-basic') {
+                dir('CA2/Part2/react-and-spring-data-rest-basic') {
                     echo 'Testing...'
                     sh './gradlew test'
                     junit 'build/test-results/test/*.xml'
@@ -36,7 +36,7 @@ pipeline {
 
         stage('Javadoc') {
             steps {
-                dir('CA2/part2/react-and-spring-data-rest-basic') {
+                dir('CA2/Part2/react-and-spring-data-rest-basic') {
                     echo 'Generating Javadocs...'
                     sh './gradlew javadoc'
                     publishHTML(target: [
@@ -49,7 +49,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                dir('CA2/part2/react-and-spring-data-rest-basic') {
+                dir('CA2/Part2/react-and-spring-data-rest-basic') {
                     echo 'Building Docker Image...'
                     script {
                         dockerImage = docker.build("${IMAGE_NAME}:${BUILD_NUMBER}", "-f Dockerfile .")
@@ -74,7 +74,7 @@ pipeline {
 
         stage('Archiving') {
             steps {
-                dir('CA2/part2/react-and-spring-data-rest-basic') {
+                dir('CA2/Part2/react-and-spring-data-rest-basic') {
                     echo 'Archiving...'
                     archiveArtifacts 'build/libs/*'
                 }
