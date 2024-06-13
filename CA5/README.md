@@ -160,12 +160,12 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out...'
-                git branch: 'main', credentialsId: 'jenkins', url: 'https://github.com/pedrodgp/devops-jen.git'
+                git branch: 'main', credentialsId: 'jenkins', url: 'https://github.com/pedrodgp/devops-23-24-JPE-PSM-1231852.git'
             }
         }
         stage('Assemble') {
             steps {
-                dir('CA2/part1/gradle_basic_demo') {
+                dir('CA2/Part1/gradle_basic_demo') {
                     echo 'Assembling...'
                     sh 'chmod +x gradlew'
                     sh './gradlew clean assemble'
@@ -174,21 +174,21 @@ pipeline {
         }
         stage('Test') {
             steps {
-                dir('CA2/part1/gradle_basic_demo') {
+                dir('CA2/Part1/gradle_basic_demo') {
                     echo 'Testing...'
                     sh './gradlew test'
                     junit 'build/test-results/test/*.xml'
                 }
             }
         }
-       stage('Archiving') {
-                   steps {
-                        dir('CA2/part1/gradle_basic_demo') {
-                           echo 'Archiving...'
-                           archiveArtifacts 'build/distributions/*'
-                        }
-                   }
-       }
+        stage('Archiving') {
+            steps {
+                dir('CA2/Part1/gradle_basic_demo') {
+                    echo 'Archiving...'
+                    archiveArtifacts 'build/distributions/*'
+                }
+            }
+        }
     }
 }
 ```
@@ -320,7 +320,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out...'
-                git branch: 'main', credentialsId: 'jenkins', url: 'https://github.com/pedrodgp/devops-jen'
+                git branch: 'main', credentialsId: 'jenkins', url: 'https://github.com/pedrodgp/devops-23-24-JPE-PSM-1231852'
             }
         }
 
